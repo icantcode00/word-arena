@@ -1,41 +1,81 @@
 import streamlit as st
 
-# Inject CSS for better visibility
-st.markdown("""
+# Set page config with a bright theme
+st.set_page_config(page_title="Word Arena 🎮", page_icon="✨", layout="centered")
+
+# Custom CSS for brighter, aesthetic look
+st.markdown(
+    """
     <style>
-    .big-label {
-        font-size: 22px !important;
-        color: #222222 !important; /* dark grey, easy to read */
-        font-weight: 600 !important;
+    body {
+        background-color: #fff8f0;
+        color: #333333;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
     }
-    .score-label {
-        font-size: 20px !important;
-        color: #ff4b4b !important; /* bright red for visibility */
-        font-weight: 700 !important;
+    .title {
+        text-align: center;
+        font-size: 36px;
+        color: #ff4081;
+    }
+    .result {
+        font-size: 24px;
+        padding: 10px;
+        border-radius: 12px;
+        margin-top: 10px;
+        background-color: #ffe0f0;
+        color: #4a148c;
+        text-align: center;
+    }
+    .stButton button {
+        background-color: #ff80ab !important;
+        color: white !important;
+        font-size: 18px !important;
+        border-radius: 10px !important;
+        padding: 8px 16px;
     }
     </style>
-""", unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True,
+)
 
 # Title
-st.title("🎮 Word Fun Game")
-st.write("Reverse words, check palindromes, and score points!")
+st.markdown("<h1 class='title'>✨ Word Arena ✨</h1>", unsafe_allow_html=True)
 
-# User input
-user_input = st.text_input("Enter a word:")
+# Input box
+user_input = st.text_input("👉 Enter a word or phrase:")
 
-# Score tracker
-if "score" not in st.session_state:
-    st.session_state.score = 0
+# User selects operation
+operation = st.radio(
+    "🔧 Choose an operation:",
+    ["Reverse the string", "Check if palindrome"],
+    horizontal=True,
+)
 
-# Logic
-if user_input:
-    reversed_str = user_input[::-1]
-    st.markdown(f"<p class='big-label'>🔄 Reversed Word: {reversed_str}</p>", unsafe_allow_html=True)
-
-    if user_input.lower() == reversed_str.lower():
-        st.success("🎉 It's a palindrome!")
-        st.session_state.score += 10
+if st.button("Go! 🚀"):
+    if user_input.strip() == "":
+        st.warning("Please enter something first 💡")
     else:
-        st.warning("❌ Not a palindrome!")
+        if operation == "Reverse the string":
+            reversed_str = user_input[::-1]
+            st.markdown(
+                f"<div class='result'>🔄 Reversed: <b>{reversed_str}</b></div>",
+                unsafe_allow_html=True,
+            )
 
-    st.markdown(f"<p class='score-label'>🏆 Score: {st.session_state.score}</p>", unsafe_allow_html=True)
+        elif operation == "Check if palindrome":
+            reversed_str = user_input[::-1]
+            if user_input.lower() == reversed_str.lower():
+                st.markdown(
+                    f"<div class='result'>🎉 Yes! <b>{user_input}</b> is a Palindrome </div>",
+                    unsafe_allow_html=True,
+                )
+                st.balloons()
+                st.snow()
+            else:
+                st.markdown(
+                    f"<div class='result'>😔 Nope! <b>{user_input}</b> is not a Palindrome</div>",
+                    unsafe_allow_html=True,
+                )
+
+# Footer
+st.markdown("<br><br><center>Made with using Streamlit</center>", unsafe_allow_html=True)
